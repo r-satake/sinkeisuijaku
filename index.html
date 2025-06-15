@@ -1,9 +1,10 @@
-
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生物学単語神経衰弱ゲーム</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Interフォントのインポート */
@@ -38,6 +39,13 @@
             color: #ffffff; /* white */
             font-size: 1.5rem; /* text-2xl */
             font-weight: 700; /* font-bold */
+            overflow: hidden; /* 画像がはみ出さないように */
+        }
+        .card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 画像をカードに合わせて表示 */
+            border-radius: 0.75rem; /* rounded-xl */
         }
         .card-back {
             background-color: #ffffff; /* white */
@@ -85,7 +93,8 @@
         </div>
 
         <div id="gameBoard" class="grid grid-cols-4 gap-4 w-full">
-            </div>
+            <!-- カードはJavaScriptによってここに挿入されます -->
+        </div>
     </div>
 
     <script type="module">
@@ -119,6 +128,7 @@
         const messageBox = document.getElementById('messageBox');
 
         // メッセージボックスを表示する関数
+        // duration: 表示時間（ミリ秒）
         function showMessageBox(message, definition = '', duration = 3000) {
             messageBox.innerHTML = `<div class="text-2xl font-bold">${message}</div>`;
             if (definition) {
@@ -161,7 +171,14 @@
 
                 cardElement.innerHTML = `
                     <div class="card-inner">
-                        <div class="card-face card-front">?</div>
+                        <div class="card-face card-front">
+                            <!--
+                                ここにカードの表面の画像URLを挿入してください。
+                                現在はプレースホルダー画像を使用しています。
+                                例: <img src="https://example.com/your-uploaded-image.jpg" alt="カードの表面">
+                            -->
+                            <img src="https://placehold.co/100x100/6366f1/ffffff?text=?" alt="カードの表面の画像">
+                        </div>
                         <div class="card-face card-back">${word}</div>
                     </div>
                 `;
@@ -222,7 +239,7 @@
             if (matchedPairs === words.length) {
                 // ゲームクリア時の処理
                 const rank = calculateRank(attempts);
-                showMessageBox(`おめでとうございます！${attempts}回で全てのペアを見つけました！`, `あなたのランクは ${rank} です！`, 10000); // ランク表示のため少し長くする
+                showMessageBox(`おめでとうございます！${attempts}回で全てのペアを見つけました！`, `あなたのランクは ${rank} です！`, 10000); // ランク表示のため10秒表示
             } else {
                 showMessageBox(`マッチしました！`, `${matchedWord}: ${definition}`);
             }
@@ -244,7 +261,7 @@
 
         // ランクを計算する関数
         function calculateRank(attempts) {
-            if (attempts <= 11) {
+            if (attempts <= 10) {
                 return "S";
             } else if (attempts <= 16) {
                 return "A";
